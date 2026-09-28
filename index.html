@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Synx — Websites & Systems for Gyms, Salons & Suppliers</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --ink:#0f172a; --muted:#5b6b7f; --line:#e4e9f0; --bg:#f6f8fb;
+    --brand:#2563eb; --brand-dark:#1e40af; --accent:#f59e0b;
+  }
+  body { font-family:'Segoe UI', system-ui, -apple-system, sans-serif; color:var(--ink); background:#fff; line-height:1.6; }
+  .wrap { max-width:1080px; margin:0 auto; padding:0 24px; }
+
+  /* NAV */
+  nav { display:flex; align-items:center; justify-content:space-between; padding:20px 0; }
+  .logo { font-weight:800; font-size:22px; letter-spacing:-.5px; }
+  .logo span { color:var(--brand); }
+  nav a.cta { text-decoration:none; background:var(--ink); color:#fff; padding:10px 22px; border-radius:8px; font-weight:600; font-size:14px; }
+
+  /* HERO */
+  header { background:
+    radial-gradient(900px 400px at 85% -10%, #dbeafe 0%, transparent 60%),
+    radial-gradient(600px 300px at 10% 110%, #fef3c7 0%, transparent 55%); padding:48px 0 64px; }
+  .hero { display:grid; grid-template-columns:1.1fr .9fr; gap:48px; align-items:center; }
+  .kicker { display:inline-block; background:#e0e7ff; color:var(--brand-dark); font-size:12px; font-weight:700; letter-spacing:.8px; padding:6px 14px; border-radius:99px; margin-bottom:16px; }
+  h1 { font-size:44px; line-height:1.12; letter-spacing:-1px; margin-bottom:18px; }
+  h1 em { font-style:normal; color:var(--brand); }
+  .sub { color:var(--muted); font-size:17px; margin-bottom:26px; max-width:520px; }
+  .btnrow { display:flex; gap:12px; flex-wrap:wrap; }
+  .btn { text-decoration:none; padding:14px 26px; border-radius:10px; font-weight:700; font-size:15px; }
+  .btn.primary { background:var(--brand); color:#fff; box-shadow:0 8px 20px -6px #2563eb80; }
+  .btn.ghost { border:2px solid var(--line); color:var(--ink); background:#fff; }
+  .stats { display:flex; gap:34px; margin-top:34px; }
+  .stats b { font-size:26px; display:block; letter-spacing:-.5px; }
+  .stats span { font-size:13px; color:var(--muted); }
+
+  /* mockup frame */
+  .frame { background:#fff; border:1px solid var(--line); border-radius:16px; box-shadow:0 30px 60px -30px #0f172a2e; overflow:hidden; }
+  .frame .bar { background:#f1f5f9; padding:10px 14px; display:flex; gap:6px; align-items:center; }
+  .frame .bar i { width:10px; height:10px; border-radius:99px; background:#cbd5e1; display:inline-block; }
+  .frame .bar i:first-child { background:#f87171; } .frame .bar i:nth-child(2){ background:#fbbf24; } .frame .bar i:nth-child(3){ background:#34d399; }
+  .frame .bar b { margin-left:8px; font-size:11px; color:#94a3b8; font-weight:500; }
+
+  /* SECTION */
+  section { padding:72px 0; }
+  section.alt { background:var(--bg); }
+  h2 { font-size:32px; letter-spacing:-.8px; text-align:center; margin-bottom:8px; }
+  .lead { text-align:center; color:var(--muted); max-width:560px; margin:0 auto 40px; }
+
+  /* demo cards */
+  .grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:14px; overflow:hidden; transition:.2s; }
+  .card:hover { transform:translateY(-4px); box-shadow:0 20px 40px -20px #0f172a33; }
+  .card .shot { padding:18px; background:#f8fafc; }
+  .card h3 { padding:16px 20px 4px; font-size:18px; }
+  .card p { padding:0 20px 18px; color:var(--muted); font-size:14px; }
+  .tag { display:inline-block; font-size:11px; font-weight:700; letter-spacing:.6px; color:var(--brand); background:#eff6ff; padding:4px 10px; border-radius:99px; margin:14px 0 0 20px; }
+
+  /* mini mockups */
+  .mini { border-radius:10px; border:1px solid var(--line); background:#fff; overflow:hidden; height:180px; }
+  .mini .mhead { padding:10px 14px; font-size:12px; font-weight:800; color:#fff; }
+  .mini .mbody { padding:10px 14px; }
+  .pill { display:inline-block; font-size:9px; padding:3px 8px; border-radius:99px; margin:0 4px 4px 0; }
+  .barline { height:8px; border-radius:4px; background:#eef2f7; margin:6px 0; }
+  .btnline { display:inline-block; font-size:9px; font-weight:700; color:#fff; padding:5px 12px; border-radius:6px; margin-top:4px; }
+  .gym .mhead { background:linear-gradient(120deg,#0f172a,#1e3a8a); }
+  .salon .mhead { background:linear-gradient(120deg,#9d174d,#be185d); }
+  .supp .mhead { background:linear-gradient(120deg,#78350f,#b45309); }
+  .salon .pill { background:#fce7f3; color:#9d174d; }
+  .gym .pill { background:#dbeafe; color:#1e40af; }
+  .supp .pill { background:#fef3c7; color:#92400e; }
+
+  /* services */
+  .grid4 { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
+  .svc { background:#fff; border:1px solid var(--line); border-radius:12px; padding:24px; }
+  .svc .ico { font-size:26px; margin-bottom:12px; }
+  .svc h3 { font-size:16px; margin-bottom:6px; }
+  .svc p { font-size:13.5px; color:var(--muted); }
+
+  /* pricing */
+  .grid2 { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+  .price { background:#fff; border:1px solid var(--line); border-radius:14px; padding:28px; position:relative; }
+  .price.hot { border:2px solid var(--brand); }
+  .price .badge { position:absolute; top:-12px; left:24px; background:var(--brand); color:#fff; font-size:11px; font-weight:700; padding:4px 12px; border-radius:99px; }
+  .price h3 { font-size:17px; margin-bottom:4px; }
+  .price .amt { font-size:32px; font-weight:800; letter-spacing:-1px; }
+  .price .amt small { font-size:13px; color:var(--muted); font-weight:500; }
+  .price ul { list-style:none; margin:16px 0 20px; }
+  .price li { font-size:13.5px; padding:6px 0; color:#334155; }
+  .price li::before { content:"✓"; color:#16a34a; font-weight:800; margin-right:8px; }
+  .price a { display:block; text-align:center; text-decoration:none; padding:11px; border-radius:9px; font-weight:700; font-size:14px; border:2px solid var(--line); color:var(--ink); }
+  .price.hot a { background:var(--brand); color:#fff; border-color:var(--brand); }
+
+  /* process */
+  .steps { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; counter-reset:step; }
+  .step { background:#fff; border:1px solid var(--line); border-radius:12px; padding:22px; }
+  .step b { display:inline-block; width:30px; height:30px; border-radius:99px; background:var(--ink); color:#fff; text-align:center; line-height:30px; font-size:14px; margin-bottom:10px; }
+  .step h4 { font-size:15px; margin-bottom:4px; }
+  .step p { font-size:13px; color:var(--muted); }
+
+  /* CTA + footer */
+  .final { background:linear-gradient(120deg,var(--ink),#1e3a8a); border-radius:20px; padding:56px; text-align:center; color:#fff; margin:0 0 72px; }
+  .final h2 { color:#fff; }
+  .final p { color:#cbd5e1; margin:10px auto 26px; max-width:520px; }
+  .final a { background:#fff; color:var(--ink); text-decoration:none; font-weight:800; padding:15px 34px; border-radius:10px; display:inline-block; }
+  footer { padding:28px 0 48px; color:var(--muted); font-size:13px; text-align:center; border-top:1px solid var(--line); }
+
+  @media (max-width:860px){
+    .hero,.grid3,.grid4,.grid2,.steps { grid-template-columns:1fr; }
+    h1 { font-size:32px; }
+    .frame { display:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav>
+    <div class="logo">syn<span>x</span> Studio</div>
+    <a class="cta" href="#packages">View Packages</a>
+  </nav>
+</div>
+
+<header>
+  <div class="wrap hero">
+    <div>
+      <span class="kicker">WEBSITE &amp; SYSTEM PREVIEW</span>
+      <h1>Your customers are searching online. <em>Will they find you?</em></h1>
+      <p class="sub">We design professional websites and custom management systems for gyms, salons, and construction suppliers — booking, membership, inventory, and quotes, all in one place.</p>
+      <div class="btnrow">
+        <a class="btn primary" href="#demos">See the demos</a>
+        <a class="btn ghost" href="#packages">Pricing</a>
+      </div>
+      <div class="stats">
+        <div><b>7–14 days</b><span>launch time</span></div>
+        <div><b>Mobile-first</b><span>every build</span></div>
+        <div><b>Free 1-yr</b><span>domain + hosting</span></div>
+      </div>
+    </div>
+    <div class="frame">
+      <div class="bar"><i></i><i></i><i></i><b>yourbusiness.com</b></div>
+      <div class="mini gym" style="border:0;border-radius:0;height:230px;">
+        <div class="mhead">⚡ FitPro Gym &nbsp;·&nbsp; Book a Session</div>
+        <div class="mbody">
+          <span class="pill">Monthly ₱1,500</span><span class="pill">Walk-in ₱150</span><span class="pill">PT Session</span>
+          <div class="barline" style="width:88%"></div>
+          <div class="barline" style="width:64%"></div>
+          <span class="btnline" style="background:#2563eb">Reserve Now</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="demos">
+  <div class="wrap">
+    <h2>What your website could look like</h2>
+    <p class="lead">Demo previews built for your industry. Yours will carry your own branding, photos, prices, and services.</p>
+    <div class="grid3">
+      <div class="card">
+        <div class="shot">
+          <div class="mini gym">
+            <div class="mhead">FitPro Gym</div>
+            <div class="mbody">
+              <span class="pill">Class Schedule</span><span class="pill">Trainers</span><span class="pill">Members</span>
+              <div class="barline" style="width:92%"></div>
+              <div class="barline" style="width:70%"></div>
+              <span class="btnline" style="background:#1e3a8a">Book a Trial</span>
+            </div>
+          </div>
+        </div>
+        <span class="tag">GYMS &amp; FITNESS</span>
+        <h3>Membership &amp; booking site</h3>
+        <p>Online class schedules, trainer profiles, and a booking system. Members can reserve slots, pay online, and track their plan — while you watch sign-ups in one dashboard.</p>
+      </div>
+      <div class="card">
+        <div class="shot">
+          <div class="mini salon">
+            <div class="mhead">Glow Beauty Salon</div>
+            <div class="mbody">
+              <span class="pill">Hair</span><span class="pill">Nails</span><span class="pill">Facials</span><span class="pill">Bridal</span>
+              <div class="barline" style="width:85%"></div>
+              <div class="barline" style="width:60%"></div>
+              <span class="btnline" style="background:#be185d">Set Appointment</span>
+            </div>
+          </div>
+        </div>
+        <span class="tag">SALONS &amp; SPAS</span>
+        <h3>Appointment booking site</h3>
+        <p>A polished portfolio site with your services and price list, plus online booking with automated reminders — fewer no-shows, no more DMs and texts just to schedule.</p>
+      </div>
+      <div class="card">
+        <div class="shot">
+          <div class="mini supp">
+            <div class="mhead">BuildRight Supply Co.</div>
+            <div class="mbody">
+              <span class="pill">Cement</span><span class="pill">Steel</span><span class="pill">Tiles</span><span class="pill">Tools</span>
+              <div class="barline" style="width:90%"></div>
+              <div class="barline" style="width:55%"></div>
+              <span class="btnline" style="background:#b45309">Request Quotation</span>
+            </div>
+          </div>
+        </div>
+        <span class="tag">CONSTRUCTION SUPPLIERS</span>
+        <h3>Catalog &amp; quotation system</h3>
+        <p>A searchable product catalog with live inventory, quotation requests, and delivery tracking. Contractors can check stock and request quotes — day or night.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <h2>More than a website — a system that works for you</h2>
+    <p class="lead">Every site can grow into a full business system as you scale.</p>
+    <div class="grid4">
+      <div class="svc"><div class="ico">🌐</div><h3>Professional Website</h3><p>Fast, mobile-first design that ranks on Google and turns visitors into customers.</p></div>
+      <div class="svc"><div class="ico">📅</div><h3>Booking &amp; Scheduling</h3><p>Online reservations with automated confirmations and reminders for clients and staff.</p></div>
+      <div class="svc"><div class="ico">📦</div><h3>Inventory &amp; Orders</h3><p>Track stock, receive orders, and generate delivery and sales reports automatically.</p></div>
+      <div class="svc"><div class="ico">💳</div><h3>Payments &amp; Billing</h3><p>GCash, bank transfer, and card payments — with invoices sent and tracked for you.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="packages">
+  <div class="wrap">
+    <h2>Simple packages, honest pricing</h2>
+    <p class="lead">One-time build with an optional monthly care plan. No surprises.</p>
+    <div class="grid2">
+      <div class="price">
+        <h3>Starter Website</h3>
+        <div class="amt">₱15,000 <small>one-time</small></div>
+        <ul>
+          <li>5-page mobile-first website</li>
+          <li>Your branding &amp; photos</li>
+          <li>Google Maps &amp; SEO setup</li>
+          <li>Facebook &amp; Viber buttons</li>
+          <li>Free domain + 1 year hosting</li>
+        </ul>
+        <a href="#contact">Get Started</a>
+      </div>
+      <div class="price hot">
+        <span class="badge">MOST POPULAR</span>
+        <h3>Website + System</h3>
+        <div class="amt">₱35,000 <small>one-time</small></div>
+        <ul>
+          <li>Everything in Starter</li>
+          <li>Booking or membership system</li>
+          <li>Client or inventory dashboard</li>
+          <li>Online payments (GCash/bank)</li>
+          <li>Automated SMS/email notifications</li>
+          <li>Staff training included</li>
+        </ul>
+        <a href="#contact">Get Started</a>
+      </div>
+      <div class="price">
+        <h3>Full Business Suite</h3>
+        <div class="amt">Custom</div>
+        <ul>
+          <li>Multi-branch ready</li>
+          <li>Full operations system</li>
+          <li>Reports &amp; analytics</li>
+          <li>Dedicated support plan</li>
+        </ul>
+        <a href="#contact">Talk to Us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <h2>How it works</h2>
+    <p class="lead">From first call to launch in as fast as two weeks.</p>
+    <div class="steps">
+      <div class="step"><b>1</b><h4>Free consult</h4><p>15-minute call to understand your business and goals.</p></div>
+      <div class="step"><b>2</b><h4>Design preview</h4><p>We show you a mockup of your site before you pay anything.</p></div>
+      <div class="step"><b>3</b><h4>Build &amp; train</h4><p>We build it and train you and your staff to run it.</p></div>
+      <div class="step"><b>4</b><h4>Launch &amp; support</h4><p>Go live, get found on Google, and grow with ongoing support.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="final">
+      <h2>Ready to see your business online?</h2>
+      <p>Reply to our message or reach out today — the first design preview is free, and takes just a few days.</p>
+      <a href="mailto:hello@synx.asia">Request Your Free Preview</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  synx Studio · Websites &amp; Business Systems · This is a service preview page.
+</footer>
+
+</body>
+</html>
