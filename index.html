@@ -112,6 +112,33 @@
     h1 { font-size:32px; }
     .frame { display:none; }
   }
+
+  /* LIVE DEMO */
+  .demo-shell { max-width:760px; margin:0 auto; background:#fff; border:1px solid var(--line); border-radius:16px; box-shadow:0 30px 60px -30px #0f172a2e; overflow:hidden; }
+  .demo-tabs { display:flex; background:#f1f5f9; border-bottom:1px solid var(--line); }
+  .demo-tabs button { flex:1; padding:14px 8px; border:none; background:transparent; font-weight:700; font-size:14px; color:var(--muted); cursor:pointer; border-bottom:3px solid transparent; font-family:inherit; }
+  .demo-tabs button.on { color:var(--brand); border-bottom-color:var(--brand); background:#fff; }
+  .demo-body { padding:26px 28px 30px; }
+  .demo-step { font-size:11px; font-weight:800; letter-spacing:1px; color:#94a3b8; margin:18px 0 10px; }
+  .demo-step:first-child { margin-top:0; }
+  .chips { display:flex; flex-wrap:wrap; gap:10px; }
+  .chip { border:1.5px solid var(--line); background:#fff; border-radius:10px; padding:10px 16px; font-size:14px; font-weight:600; color:var(--ink); cursor:pointer; font-family:inherit; transition:.15s; }
+  .chip:hover { border-color:var(--brand); }
+  .chip.on { border-color:var(--brand); background:#eff6ff; color:var(--brand-dark); }
+  .chip small { display:block; font-weight:500; color:var(--muted); font-size:11px; }
+  .demo-form { display:flex; gap:10px; flex-wrap:wrap; margin-top:4px; }
+  .demo-form input { flex:1; min-width:160px; border:1.5px solid var(--line); border-radius:10px; padding:12px 14px; font-size:14px; font-family:inherit; }
+  .demo-form input:focus { outline:none; border-color:var(--brand); }
+  .demo-cta { width:100%; margin-top:18px; background:var(--brand); color:#fff; border:none; border-radius:10px; padding:14px; font-size:15px; font-weight:700; cursor:pointer; font-family:inherit; box-shadow:0 8px 20px -6px #2563eb80; }
+  .demo-cta:hover { background:var(--brand-dark); }
+  .demo-cta:disabled { opacity:.45; cursor:not-allowed; box-shadow:none; }
+  .demo-done { text-align:center; padding:18px 10px 6px; }
+  .demo-done .tick { width:64px; height:64px; margin:0 auto 14px; border-radius:99px; background:#dcfce7; display:flex; align-items:center; justify-content:center; font-size:30px; }
+  .demo-done h3 { font-size:20px; margin-bottom:6px; }
+  .demo-done p { color:var(--muted); font-size:14px; }
+  .demo-done .ref { display:inline-block; margin-top:12px; background:#f1f5f9; border-radius:8px; padding:8px 16px; font-weight:700; font-size:13px; letter-spacing:.5px; }
+  .demo-note { text-align:center; color:var(--muted); font-size:13px; margin-top:18px; }
+  .demo-note b { color:var(--ink); }
 </style>
 </head>
 <body>
@@ -224,6 +251,21 @@
   </div>
 </section>
 
+<section id="live-demo" class="alt">
+  <div class="wrap">
+    <h2>Try it yourself — live demo</h2>
+    <p class="lead">This is a working booking system, right here in the page. Switch to your business type and book a slot — your customers would do exactly this, from their phone.</p>
+    <div class="demo-shell">
+      <div class="demo-tabs">
+        <button id="tab-gym" class="on" onclick="setBiz('gym')">🏋️ Gym</button>
+        <button id="tab-salon" onclick="setBiz('salon')">💇 Salon</button>
+        <button id="tab-supp" onclick="setBiz('supp')">🏗️ Supplier</button>
+      </div>
+      <div class="demo-body" id="demoBody"></div>
+    </div>
+    <p class="demo-note">Every booking sends <b>automatic confirmations and reminders</b> to your customer — and lands in your own dashboard with reports.</p>
+  </div>
+</section>
 <section id="packages">
   <div class="wrap">
     <h2>Simple packages, honest pricing</h2>
@@ -297,5 +339,61 @@
   synx Studio · Websites &amp; Business Systems · This is a service preview page.
 </footer>
 
+
+<script>
+const BIZ = {
+  gym:   { label:'gym session', cta:'Book my session',
+           items:[['Trial Workout','Free · 45 min'],['Personal Training','₱800 · 1 hr'],['Group Class','₱350 · 1 hr'],['Monthly Membership','₱1,500 · unlimited']] },
+  salon: { label:'appointment', cta:'Book my appointment',
+           items:[['Haircut & Style','₱450 · 45 min'],['Korean Hair Color','₱1,200 · 2 hrs'],['Nail Care','₱550 · 1 hr'],['Full Facial','₱850 · 1 hr']] },
+  supp:  { label:'quotation request', cta:'Request quotation',
+           items:[['Cement &amp; Aggregates'],['Steel &amp; Rebar'],['Paint &amp; Finishes'],['Plumbing &amp; Electrical']] }
+};
+let biz='gym', item=null, day=null, slot=null;
+const DAYS=['Today','Tomorrow','Wed','Thu','Fri','Sat'];
+const SLOTS=['9:00 AM','10:30 AM','1:00 PM','2:30 PM','4:00 PM'];
+function setBiz(b){ biz=b; item=day=slot=null; render(); }
+function pick(type,val){ if(type=='item')item=val; if(type=='day')day=val; if(type=='slot')slot=val; render(); }
+function fmtItem(i){
+  if(biz=='supp') return '<div>'+i[0]+'</div>';
+  return '<div>'+i[0]+'</div><small>'+i[1]+'</small>';
+}
+function render(){
+  const B=BIZ[biz];
+  document.querySelectorAll('.demo-tabs button').forEach(t=>t.classList.toggle('on', t.id=='tab-'+(biz=='supp'?'supp':biz)));
+  let h='<div class="demo-step">1 · CHOOSE WHAT YOU NEED</div><div class="chips">';
+  B.items.forEach((it,i)=>h+='<button class="chip '+(item==i?'on':'')+'" onclick="pick(\'item\','+i+')">'+fmtItem(it)+'</button>');
+  h+='</div>';
+  if(item!==null){
+    h+='<div class="demo-step">2 · PICK A '+(biz=='supp'?'DELIVERY DATE':'DATE &amp; TIME')+'</div><div class="chips">';
+    DAYS.forEach((d,i)=>h+='<button class="chip '+(day==i?'on':'')+'" onclick="pick(\'day\','+i+')">'+d+'</button>');
+    h+='</div>';
+    if(day!==null){
+      h+='<div class="demo-step">3 · '+(biz=='supp'?'PREFERRED TIME FOR CALLBACK':'TIME SLOT')+'</div><div class="chips">';
+      SLOTS.forEach((s,i)=>h+='<button class="chip '+(slot==i?'on':'')+'" onclick="pick(\'slot\','+i+')">'+s+'</button>');
+      h+='</div>';
+      if(slot!==null){
+        h+='<div class="demo-step">4 · YOUR DETAILS</div><div class="demo-form">';
+        h+='<input id="dn" placeholder="Your name"><input id="dp" placeholder="Mobile number">';
+        h+='<button class="demo-cta" onclick="bookNow()">'+B.cta+'</button></div>';
+      }
+    }
+  }
+  document.getElementById('demoBody').innerHTML=h;
+}
+function bookNow(){
+  const B=BIZ[biz], n=document.getElementById('dn').value||'Juan Dela Cruz';
+  const what = biz=='supp' ? B.items[item][0] : B.items[item][0];
+  const ref='SYNX-'+Math.random().toString(36).slice(2,7).toUpperCase();
+  document.getElementById('demoBody').innerHTML =
+    '<div class="demo-done"><div class="tick">✅</div>'+
+    '<h3>'+(biz=='supp'?'Quotation request received':'Booking confirmed')+', '+n.split(' ')[0]+'!</h3>'+
+    '<p>'+what+(biz=='supp'?'':' · '+DAYS[day]+' at '+SLOTS[slot])+'</p>'+
+    '<div class="ref">Ref #'+ref+'</div>'+
+    '<p style="margin-top:14px">A confirmation was sent by SMS &amp; email — your team sees this instantly in the dashboard.</p></div>';
+  setTimeout(render, 6000);
+}
+render();
+</script>
 </body>
 </html>
